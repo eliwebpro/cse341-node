@@ -8,12 +8,12 @@
   "name": "python-havard",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "devDependencies": {
     "nodemon": "^3.1.9"
   },
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon server.js",
     "gitupdate": "git add . && git commit -m 'update' && git push"
   },
   "keywords": [],
