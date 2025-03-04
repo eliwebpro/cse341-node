@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1"
+  },
+  "name": "python-havard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "gitupdate": "git add . && git commit -m 'update' && git push"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
