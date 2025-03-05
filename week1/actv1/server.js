@@ -76,30 +76,37 @@
 // console.log('port 3000 is listening')
 
 
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 
-app.get('/', (req, res) => {
-    res.send('Hello Eliezio');
-    res.end();
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello Eliezio');
+//     res.end();
+// });
 
-const port = 3000;
+// const port = 3000;
 
-app.listen(process.env.port || port);
-console.log('Web Server is listening at port ' + (process.env.PORT || port));
-
-
+// app.listen(process.env.port || port);
+// console.log('Web Server is listening at port ' + (process.env.PORT || port));
 
 
+// mongodb+srv://<>@cluster0.fjv4e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+// mongosh "mongodb+srv://elieziopingo1989::amor1103@cluster0.fjv4e.mongodb.net/?retryWrites=true&w=majority"
+
+
+// mongodb+srv://elieziopingo1989:<amor1103>@cluster0.fjv4e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 
 
+// mongodb+srv://root:<root>@cluster0.fjv4e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
+require('dotenv').config();
+const mongoose = require('mongoose');
 
-
-
-
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('✅ Conectado ao MongoDB!'))
+    .catch(err => console.error('❌ Erro na conexão:', err));
 
 
 
