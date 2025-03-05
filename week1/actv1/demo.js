@@ -54,7 +54,7 @@ async function findListingsWithCriteria(client, {
             console.log("\n🏠 Listagens encontradas:");
             results.forEach((result, i) => {
                 console.log(`\n${i + 1}. 🏡 ${result.name || "Sem Nome"}`);
-                console.log(`   📜 ${result.summary || "Sem descrição"}`);
+                // console.log(`   📜 ${result || "Sem descrição"}`);
                 console.log(`   🛏️ Quartos: ${result.bedrooms} | 🚿 Banheiros: ${result.bathrooms}`);
                 console.log(`   🗓️ Última Avaliação: ${result.last_review ? result.last_review.toISOString().split('T')[0] : "N/A"}`);
             });
