@@ -3,29 +3,25 @@ require('dotenv').config(); // Carregar variáveis do .env
 
 async function main() {
     const uri = process.env.MONGO_URI; // Pegando a string de conexão do .env
+    if (!uri) {
+        console.error("❌ Erro: MONGO_URI não definido no .env");
+        return;
+    }
+
     const client = new MongoClient(uri);
 
     try {
         await client.connect();
         console.log("✅ Conectado ao MongoDB!");
 
-        // Criando uma nova listagem na coleção "listingsAndReviews"
-        await createMultipleListings(client, [
-            {
-                name: "Lovely Loft 2",
-                summary: "A charming loft in Paris",
-                bedrooms: 1,
-                bathrooms: 1
-            },
-            {
-                name: "Spacious flat",
-                summary: "A spacious flat in the heart of London",
-                bedrooms: 2,
-                bathrooms: 2
-            }]
-        );
+        // Buscar listagens com critérios específicos
+        await findListingsWithCriteria(client, {
+            minimumNumberOfBedrooms: 4,
+            minimumNumberOfBathrooms: 2,
+            maximumNumberOfResults: 5
+        });
 
-        // Listar todos os bancos de dados
+        // Listar bancos de dados disponíveis
         await listDatabases(client);
 
     } catch (e) {
@@ -37,21 +33,46 @@ async function main() {
 
 main().catch(console.error);
 
-async function createMultipleListings(client, newListing) {
-    const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertMany(newListing);
-    console.log(`✅ ${result.insertedCount} registros criados com sucesso!`);
-    console.log(result.insertedIds);
+// 🔹 Função para buscar listagens com critérios específicos
+async function findListingsWithCriteria(client, {
+    minimumNumberOfBedrooms = 0,
+    minimumNumberOfBathrooms = 0,
+    maximumNumberOfResults = 5
+} = {}) {
+    try {
+        const cursor = client.db("sample_airbnb").collection("listingsAndReviews")
+            .find({
+                bedrooms: { $gte: minimumNumberOfBedrooms },
+                bathrooms: { $gte: minimumNumberOfBathrooms }
+            })
+            .sort({ last_review: -1 }) // Ordenando pelo último review mais recente
+            .limit(maximumNumberOfResults);
+
+        const results = await cursor.toArray();
+
+        if (results.length > 0) {
+            console.log("\n🏠 Listagens encontradas:");
+            results.forEach((result, i) => {
+                console.log(`\n${i + 1}. 🏡 ${result.name || "Sem Nome"}`);
+                console.log(`   📜 ${result.summary || "Sem descrição"}`);
+                console.log(`   🛏️ Quartos: ${result.bedrooms} | 🚿 Banheiros: ${result.bathrooms}`);
+                console.log(`   🗓️ Última Avaliação: ${result.last_review ? result.last_review.toISOString().split('T')[0] : "N/A"}`);
+            });
+        } else {
+            console.log("⚠️ Nenhum resultado encontrado para os critérios fornecidos.");
+        }
+    } catch (error) {
+        console.error("❌ Erro ao buscar listagens:", error);
+    }
 }
 
-// 🔹 Função para criar uma nova listagem no banco de dados
-async function createListing(client, newListing) {
-    const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertOne(newListing);
-    console.log(`✅ Novo registro criado com o ID: ${result.insertedId}`);
-}
-
-// 🔹 Função para listar todos os bancos de dados
+// 🔹 Função para listar bancos de dados disponíveis
 async function listDatabases(client) {
-    const databasesList = await client.db().admin().listDatabases();
-    console.log("📂 Bancos de Dados:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+    try {
+        const databasesList = await client.db().admin().listDatabases();
+        console.log("\n📂 Bancos de Dados Disponíveis:");
+        databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+    } catch (error) {
+        console.error("❌ Erro ao listar bancos de dados:", error);
+    }
 }
