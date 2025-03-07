@@ -76,14 +76,19 @@
 // console.log('port 3000 is listening')
 
 
-const express = require('express');
-const app = express();
+var express = require('express');
+var app = express();
+var router = express.Router();
 
 app.get('/', (req, res) => {
-    res.send('Hello Fernando');
+    res.send('Hello Eliezio');
     res.end();
 });
 
+app.get('/about', (req, res) => {
+    res.send('About Us');
+    res.end();
+});
 const port = 3000;
 
 app.listen(process.env.port || port);
