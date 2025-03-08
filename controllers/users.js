@@ -1,33 +1,22 @@
 const mongodb = require('../data/database');
-const { ObjectId } = require('mongodb');
 
-// Get all users
-const getAll = async (req, res) => {
+const getAllUsers = async (req, res) => {
     try {
-        const result = await mongodb.getDatabase().collection('users').find();
-        const users = await result.toArray();
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching users", error });
-    }
-};
+        console.log("📥 Recebendo requisição GET /users");
+        const db = mongodb.getDatabase();
+        const users = await db.collection('users').find().toArray();
 
-// Get a single user
-const getSingle = async (req, res) => {
-    try {
-        const userId = new ObjectId(req.params.id);
-        const result = await mongodb.getDatabase().collection('users').findOne({ _id: userId });
+        console.log("📂 Usuários encontrados:", users); // Log para depuração
 
-        if (!result) {
-            return res.status(404).json({ message: "User not found" });
+        if (!users || users.length === 0) {
+            return res.status(404).json({ message: "Nenhum usuário encontrado." });
         }
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(result);
+        res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching user", error });
+        console.error("❌ Erro ao buscar usuários:", error);
+        res.status(500).json({ message: "Erro interno no servidor" });
     }
 };
 
-module.exports = { getAll, getSingle };
+module.exports = { getAllUsers };
