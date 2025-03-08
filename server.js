@@ -1,21 +1,17 @@
+require('dotenv').config(); // Load .env variables
 const express = require('express');
-
 const mongodb = require('./data/database');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use('/', require('./routes'));
-
-
-mongodb.initDb((err, db) => {
+// Initialize MongoDB connection
+mongodb.initDb((err) => {
     if (err) {
-        console.error(err);}
-    else {
+        console.error("❌ Erro ao conectar ao MongoDB:", err);
+    } else {
         app.listen(port, () => {
-            console.log(`Server is running on port:${port}`)});
+            console.log(`🚀 Servidor rodando na porta: ${port}`);
+        });
     }
 });
-
-
-app.listen(port, () => {
-    console.log(`Server is running on port:${port}`)});
