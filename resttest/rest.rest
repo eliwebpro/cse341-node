@@ -1,0 +1,41 @@
+### ✅ GET all professionals
+GET http://localhost:8080/professional
+Accept: application/json
+
+### ✅ POST new professional
+POST http://localhost:8080/professional
+Content-Type: application/json
+
+{
+  "professionalName": "Eliezio Silva",
+  "base64Image": "YOUR_BASE64_ENCODED_IMAGE_HERE",
+  "nameLink": {
+    "firstName": "Eliezio",
+    "url": "https://your-portfolio.com"
+  },
+  "primaryDescription": "Full Stack Developer specializing in Node.js and MongoDB.",
+  "workDescription1": "Building scalable backend applications with Express.js and MongoDB.",
+  "workDescription2": "Developing responsive frontend apps.",
+  "linkTitleText": "Find me on:",
+  "linkedInLink": {
+    "text": "LinkedIn",
+    "link": "https://www.linkedin.com/in/eliezio-silva"
+  },
+  "githubLink": {
+    "text": "GitHub",
+    "link": "https://github.com/eliezio-silva"
+  }
+}
+
+### ✅ PUT update a professional (Replace `{id}` with an actual ID from GET response)
+PUT http://localhost:8080/professional/{id}
+Content-Type: application/json
+
+{
+  "primaryDescription": "Updated description",
+  "workDescription1": "Updated work experience.",
+  "workDescription2": "New project details."
+}
+
+### ✅ DELETE a professional (Replace `{id}` with an actual ID from GET response)
+DELETE http://localhost:8080/professional/{id}

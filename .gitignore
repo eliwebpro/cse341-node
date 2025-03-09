@@ -1,6 +1,5 @@
 node_modules
 .env
 .vscode
-resttest
 actv1
 testDb.js
