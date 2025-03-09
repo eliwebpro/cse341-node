@@ -11,7 +11,7 @@ const initDb = async (callback) => {
 
     MongoClient.connect(process.env.MONGO_URI)
         .then((client) => {
-            database = client.db("project1"); // Garante que está acessando "project1"
+            database = client.db("project1"); 
             console.log("Project1 database initialized!");
             callback(null, database);
         })

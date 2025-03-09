@@ -1,5 +1,5 @@
 const mongodb = require('../data/database');
-const { ObjectId } = require('mongodb'); // Required for querying by _id
+const { ObjectId } = require('mongodb'); 
 
 const getAllUsers = async (req, res) => {
     try {
@@ -18,7 +18,6 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-// **New function to fetch user by ID**
 const getUserById = async (req, res) => {
     try {
         const userId = req.params.id;
