@@ -6,13 +6,12 @@ router.get('/professional', async (req, res) => {
     try {
         console.log("GET /professional");
         const db = mongodb.getDatabase();
-        const data = await db.collection('test').findOne();
+        const data = await db.collection('test').findOne();//test froom mongodb
 
         if (!data) {
-            return res.status(404).json({ message: "Nenhum dado encontrado" });
+            return res.status(404).json({ message: "Nenhum dado encontrado" });//404 not found
         }
 
-        // **Garante que o JSON esteja formatado corretamente para o frontend**
         const response = {
             _id: data._id,
             professionalName: data.professionalName || "",
@@ -31,7 +30,7 @@ router.get('/professional', async (req, res) => {
 
     } catch (error) {
         console.error("Erro ao buscar profissional:", error);
-        res.status(500).json({ message: "Erro no servidor" });
+        res.status(500).json({ message: "Erro no servidor" });//500 server error
     }
 });
 
