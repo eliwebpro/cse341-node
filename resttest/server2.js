@@ -1,22 +1,16 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./data/database'); 
-const routes = require('./routes'); 
+require('./data/database'); // Conexão com MongoDB
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = 8080; // Mudamos para 8080 para corresponder ao script.js
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/', routes);
+const routes = require('./routes/index');
+app.use('/', routes); // Agora a rota principal é acessível direto sem "/api"
 
-
-connectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-  });
-}).catch((error) => {
-  console.error("Server failed to start:", error);
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
 });
