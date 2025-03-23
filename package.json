@@ -26,6 +26,7 @@
     "content-type": "^1.0.5",
     "cookie": "^0.7.1",
     "cookie-signature": "^1.0.6",
+    "cors": "^2.8.5",
     "debug": "^2.6.9",
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
@@ -105,6 +106,7 @@
     "simple-update-notifier": "^2.0.0",
     "statuses": "^2.0.1",
     "supports-color": "^7.2.0",
+    "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",
     "to-regex-range": "^5.0.1",
     "toidentifier": "^1.0.1",
@@ -114,8 +116,7 @@
     "undefsafe": "^2.0.5",
     "unpipe": "^1.0.0",
     "utils-merge": "^1.0.1",
-    "vary": "^1.1.2",
-    "swagger-autogen": "^2.23.7"
+    "vary": "^1.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
