@@ -63,34 +63,31 @@ const createUser = async (req, res) => {
   };
 // put
 const updateUser = async (req, res) => {
-    try {
-      const itemId = req.params.id;
-      const updateFields = req.body;
-  
-      if (!ObjectId.isValid(itemId)) {
-        return res.status(400).json({ message: "Formato de ID inválido" });
-      }
-  
-      if (Object.keys(updateFields).length === 0) {
-        return res.status(400).json({ message: "Envie ao menos um campo para atualizar." });
-      }
-  
-      const db = mongodb.getDatabase();
-      const result = await db.collection('users').updateOne(
-        { _id: new ObjectId(itemId) },
-        { $set: updateFields }
-      );
-  
-      if (result.matchedCount === 0) {
-        return res.status(404).json({ message: "Item não encontrado" });
-      }
-  
-      res.status(200).json({ message: "Item atualizado com sucesso" });
-    } catch (error) {
-      console.error("Erro ao atualizar item:", error);
-      res.status(500).json({ message: "Erro interno do servidor" });
+  try {
+    const itemId = req.params.id;
+    const updateFields = req.body;
+
+    if (!updateFields || typeof updateFields.quantidade !== "number") {
+      return res.status(400).json({ message: "Campo 'quantidade' obrigatório e deve ser número." });
     }
-  };
+
+    const db = mongodb.getDatabase();
+    const result = await db.collection('users').updateOne(
+      { _id: itemId }, // UUID como string
+      { $set: updateFields }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Item não encontrado" });
+    }
+
+    res.status(200).json({ message: "Item atualizado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao atualizar item:", error);
+    res.status(500).json({ message: "Erro interno do servidor" });
+  }
+};
+
   
 
   //DELETE
