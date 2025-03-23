@@ -1,27 +1,23 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors'); // <--- Adicionado aqui
-const mongodb = require('./data/database');
-
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-
-const app = express();
-
-app.use(cors()); // <--- Habilita CORS para todas as origens
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(express.json());
-app.use('/', require('./routes'));
-
-const port = process.env.PORT || 8080;
-
-mongodb.initDb((err) => {
-    if (err) {
-        console.error("Error to connect to MongoDB:", err);
-    } else {
-        app.listen(port, () => {
-            console.log(`Server is running on port: ${port}`);
-        });
+exports.updateUser = async (req, res) => {
+    const itemId = parseInt(req.params.id);
+    const novaQuantidade = req.body.quantidade;
+  
+    const db = require('../data/database').getDb();
+  
+    try {
+      const result = await db.collection('users').updateOne(
+        { "Sun Tunnels.id": itemId },
+        { $set: { "Sun Tunnels.$.quantidade": novaQuantidade } }
+      );
+  
+      if (result.modifiedCount === 0) {
+        return res.status(404).json({ error: "Item não encontrado" });
+      }
+  
+      res.status(200).json({ message: "Atualizado com sucesso!" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
-});
+  };
+  
+  

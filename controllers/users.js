@@ -36,58 +36,64 @@ const getUserById = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
-
-//POST
+// post
 const createUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, favoriteColor, birthday } = req.body;
-
-        if (!firstName || !lastName || !email || !birthday) {
-            return res.status(400).json({ message: "Fields (firstName, lastName, email, birthday) are required." });
-        }
-
-        const db = mongodb.getDatabase();
-        const result = await db.collection('users').insertOne({ firstName, lastName, email, favoriteColor, birthday });
-
-        res.status(201).json({ message: "User created successfully", userId: result.insertedId });
+      const { tipo, nome, quantidade } = req.body;
+  
+      if (!tipo || !nome || quantidade === undefined) {
+        return res.status(400).json({ message: "Campos 'tipo', 'nome' e 'quantidade' são obrigatórios." });
+      }
+  
+      const db = mongodb.getDatabase();
+      const result = await db.collection('users').insertOne({
+        tipo,
+        nome,
+        quantidade
+      });
+  
+      res.status(201).json({
+        message: "Item de estoque criado com sucesso",
+        itemId: result.insertedId
+      });
     } catch (error) {
-        console.error("Error creating user:", error);
-        res.status(500).json({ message: "Server error" });
+      console.error("Erro ao criar item:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
     }
-};
-
-//PUT
+  };
+// put
 const updateUser = async (req, res) => {
     try {
-        const userId = req.params.id;
-        const updateFields = req.body;
-
-        if (!ObjectId.isValid(userId)) {
-            return res.status(400).json({ message: "Invalid ID format" });
-        }
-
-        if (Object.keys(updateFields).length === 0) {
-            return res.status(400).json({ message: "At least one field must be provided for update." });
-        }
-
-        const db = mongodb.getDatabase();
-        const result = await db.collection('users').updateOne(
-            { _id: new ObjectId(userId) },
-            { $set: updateFields }
-        );
-
-        if (result.matchedCount === 0) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.status(200).json({ message: "User updated successfully" });
+      const itemId = req.params.id;
+      const updateFields = req.body;
+  
+      if (!ObjectId.isValid(itemId)) {
+        return res.status(400).json({ message: "Formato de ID inválido" });
+      }
+  
+      if (Object.keys(updateFields).length === 0) {
+        return res.status(400).json({ message: "Envie ao menos um campo para atualizar." });
+      }
+  
+      const db = mongodb.getDatabase();
+      const result = await db.collection('users').updateOne(
+        { _id: new ObjectId(itemId) },
+        { $set: updateFields }
+      );
+  
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ message: "Item não encontrado" });
+      }
+  
+      res.status(200).json({ message: "Item atualizado com sucesso" });
     } catch (error) {
-        console.error("Error updating user:", error);
-        res.status(500).json({ message: "Server error" });
+      console.error("Erro ao atualizar item:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
     }
-};
+  };
+  
 
-//DELETE
+  //DELETE
 const deleteUser = async (req, res) => {
     try {
         const userId = req.params.id;
